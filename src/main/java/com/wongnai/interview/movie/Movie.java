@@ -31,6 +31,11 @@ public class Movie {
 		this.name = name;
 	}
 
+	public Movie(String name, List<String> actors) {
+		this.name = name;
+		this.actors = actors;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -45,5 +50,9 @@ public class Movie {
 
 	public List<String> getActors() {
 		return actors;
+	}
+
+	public void setActors(List<String> actors) {
+		this.actors = actors;
 	}
 }
