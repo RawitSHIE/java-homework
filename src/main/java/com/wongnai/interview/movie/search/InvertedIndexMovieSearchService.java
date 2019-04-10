@@ -1,6 +1,8 @@
 package com.wongnai.interview.movie.search;
 
-import java.util.List;
+import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
@@ -35,6 +37,34 @@ public class InvertedIndexMovieSearchService implements MovieSearchService {
 		// you have to return can be union or intersection of those 2 sets of ids.
 		// By the way, in this assignment, you must use intersection so that it left for just movie id 5.
 
-		return null;
+		HashMap<String, HashSet<Long>> index = new HashMap<>();
+		List<Movie> movies = movieRepository.getAll();
+		for (Movie m: movies) {
+			Supplier<Stream<String>> words = () -> Stream.of(m.getName().toLowerCase().split(" "));
+			words.get().filter(w -> !index.containsKey(w)).forEach(w -> index.put(w, new HashSet<Long>()));
+			words.get().forEach(w -> index.get(w).add(m.getId()));
+		}
+		Stream<String> queryWords = Arrays.stream(queryText.toLowerCase().split(" "));
+		List<HashSet<Long>> setList = new ArrayList<>(Collections.emptyList());
+		queryWords.filter(word -> index.containsKey(word)).forEach(word -> setList.add(index.get(word)));
+		List<Movie> findingResult = new ArrayList<>(Collections.emptyList());
+		if (!setList.isEmpty()) {
+			findingResult = movieRepository.findByIdIn(intersect(setList));
+		}
+		return findingResult;
+	}
+
+	// Find intersection of n HashSet
+	private List<Long> intersect(List<HashSet<Long>> setList) {
+		if (setList.isEmpty()) {
+			System.out.println("Set of list is empty");
+			return null;
+		}
+		Iterator<HashSet<Long>> it = setList.iterator();
+		HashSet<Long> result = new HashSet<>(it.next());
+		while (it.hasNext()) {
+			result.retainAll(it.next());
+		}
+		return new ArrayList<>(result);
 	}
 }
