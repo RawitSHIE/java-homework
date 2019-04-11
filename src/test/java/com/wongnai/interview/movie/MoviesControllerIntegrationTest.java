@@ -19,16 +19,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @AutoConfigureMockMvc
 public class MoviesControllerIntegrationTest {
-	@Autowired
-	private MockMvc mvc;
+    @Autowired
+    private MockMvc mvc;
 
-	@Test
-	public void testSearchWithRestApi() throws Exception {
-		mvc.perform(get("/movies/search?q=Glorious"))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$").isArray())
-				.andExpect(jsonPath("$.length()", Matchers.equalTo(7)))
-				.andExpect(jsonPath("$[?(@.name == 'The Glorious Fool')].actors[*]",
-						Matchers.equalTo(Arrays.asList("Helene Chadwick", "Richard Dix"))));
-	}
+    @Test
+    public void testSearchWithRestApi() throws Exception {
+        mvc.perform(get("/movies/search?q=Glorious"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$.length()", Matchers.equalTo(7)))
+                .andExpect(jsonPath("$[?(@.name == 'The Glorious Fool')].actors[*]",
+                        Matchers.equalTo(Arrays.asList("Helene Chadwick", "Richard Dix"))));
+    }
 }

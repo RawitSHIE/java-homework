@@ -6,12 +6,12 @@ import org.springframework.stereotype.Component;
 
 @Component("movieDatabaseInitializer")
 public class MovieDatabaseInitializer implements InitializingBean {
-	@Autowired
-	private MovieDataSynchronizer movieDataSynchronizer;
+    @Autowired
+    private MovieDataSynchronizer movieDataSynchronizer;
 
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		//run sync while server is starting
-		movieDataSynchronizer.forceSync();
-	}
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        //run sync while server is starting
+        movieDataSynchronizer.forceSync();
+    }
 }

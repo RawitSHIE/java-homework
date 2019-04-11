@@ -14,25 +14,25 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
 public class MovieDataServiceImplIntegrationTest {
-	@Autowired
-	private MovieDataServiceImpl movieDataService;
+    @Autowired
+    private MovieDataServiceImpl movieDataService;
 
-	@Test
-	public void testFetchAll() {
-		MoviesResponse result = movieDataService.fetchAll();
-		Assert.assertThat(result.size(), Matchers.equalTo(28795));
-	}
+    @Test
+    public void testFetchAll() {
+        MoviesResponse result = movieDataService.fetchAll();
+        Assert.assertThat(result.size(), Matchers.equalTo(28795));
+    }
 
-	@Test
-	public void testMappingDataCorrectly() {
-		MoviesResponse result = movieDataService.fetchAll();
-		Optional<MovieData> afterDark = result.stream()
-				.filter(m -> m.getTitle().equals("One Night in Rome"))
-				.findFirst();
+    @Test
+    public void testMappingDataCorrectly() {
+        MoviesResponse result = movieDataService.fetchAll();
+        Optional<MovieData> afterDark = result.stream()
+                .filter(m -> m.getTitle().equals("One Night in Rome"))
+                .findFirst();
 
-		Assert.assertThat(afterDark.isPresent(), Matchers.equalTo(true));
-		Assert.assertThat(afterDark.get().getYear(), Matchers.equalTo(1924));
-		Assert.assertThat(afterDark.get().getGenres(), Matchers.equalTo(Arrays.asList("Romance")));
-		Assert.assertThat(afterDark.get().getCast(), Matchers.equalTo(Arrays.asList("Laurette Taylor", "Tom Moore")));
-	}
+        Assert.assertThat(afterDark.isPresent(), Matchers.equalTo(true));
+        Assert.assertThat(afterDark.get().getYear(), Matchers.equalTo(1924));
+        Assert.assertThat(afterDark.get().getGenres(), Matchers.equalTo(Arrays.asList("Romance")));
+        Assert.assertThat(afterDark.get().getCast(), Matchers.equalTo(Arrays.asList("Laurette Taylor", "Tom Moore")));
+    }
 }
