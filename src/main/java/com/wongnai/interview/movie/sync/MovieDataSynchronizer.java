@@ -10,10 +10,13 @@ import org.springframework.stereotype.Component;
 import com.wongnai.interview.movie.MovieRepository;
 import com.wongnai.interview.movie.external.MovieDataService;
 
+import java.awt.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 @Component
 public class MovieDataSynchronizer {
@@ -48,11 +51,8 @@ public class MovieDataSynchronizer {
 
 	// Remove outdated data and retrieve new movie data from movieDataService
 	private void initData() {
-		ArrayList<MovieData> moviesData = movieDataService.fetchAll();
+		Stream<MovieData> moviesData = movieDataService.fetchAll().stream();
 		movieRepository.deleteAll();
-		for (MovieData movie : moviesData) {
-			Movie temp = new Movie(movie.getTitle(), movie.getCast());
-			movieRepository.save(temp);
-		}
+		moviesData.forEach(movie -> movieRepository.save(new Movie(movie.getTitle(), movie.getCast())));
 	}
 }

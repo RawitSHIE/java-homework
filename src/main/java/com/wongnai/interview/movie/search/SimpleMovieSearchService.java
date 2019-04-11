@@ -24,15 +24,15 @@ public class SimpleMovieSearchService implements MovieSearchService {
 		// All test in SimpleMovieSearchServiceIntegrationTest must pass.
 		// Please do not change @Component annotation on this class
 
-		ArrayList<MovieData> allMovies = movieDataService.fetchAll();
 		List<Movie> searchedMovies = new ArrayList<>();
-		for (MovieData movie : allMovies) {
+		Stream<MovieData> moviesData = movieDataService.fetchAll().stream();
+		moviesData.forEach(movie -> {
 			Stream<String> words = Arrays.stream(movie.getTitle().split(" "));
 			if (words.anyMatch(word -> word.equalsIgnoreCase(queryText))) {
 				Movie temp = new Movie(movie.getTitle(), movie.getCast());
 				searchedMovies.add(temp);
 			}
-		}
+		});
 		return searchedMovies;
 	}
 }

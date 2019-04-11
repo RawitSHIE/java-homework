@@ -24,12 +24,15 @@ public class MovieConfiguration {
 	@Bean("invertedIndexMovieDatabase")
 	public HashMap invertedIndexMovieDatabase() {
 		HashMap<String, Set<Long>> index = new HashMap<>();
-		List<Movie> movies = movieRepository.getAll();
-		for (Movie m: movies) {
-			Supplier<Stream<String>> words = () -> Stream.of(m.getName().toLowerCase().split(" "));
-			words.get().filter(w -> !index.containsKey(w)).forEach(w -> index.put(w, new HashSet<>()));
-			words.get().forEach(w -> index.get(w).add(m.getId()));
-		}
+		Stream<Movie> movies = movieRepository.getAll().stream();
+		movies.forEach(movie -> {
+			Supplier<Stream<String>> words = () -> Stream.of(movie.getName().toLowerCase().split(" "));
+			words.get()
+					.filter(w -> !index.containsKey(w))
+					.forEach(w -> index.put(w, new HashSet<>()));
+			words.get()
+					.forEach(w -> index.get(w).add(movie.getId()));
+		});
 		return index;
 	}
 }
