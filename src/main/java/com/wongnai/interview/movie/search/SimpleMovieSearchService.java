@@ -29,8 +29,7 @@ public class SimpleMovieSearchService implements MovieSearchService {
         moviesData.forEach(movie -> {
             Stream<String> words = Arrays.stream(movie.getTitle().split(" "));
             if (words.anyMatch(word -> word.equalsIgnoreCase(queryText))) {
-                Movie temp = new Movie(movie.getTitle(), movie.getCast());
-                searchedMovies.add(temp);
+                searchedMovies.add(new Movie(movie.getTitle(), movie.getCast()));
             }
         });
         return searchedMovies;
